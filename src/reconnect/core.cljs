@@ -7,7 +7,8 @@
 (def interactions
   [{:name "Jane" :date "22 Feb" :type "meet"}
    {:name "James" :date "21 Feb" :type "meet"}
-   {:name "Clara" :date "20 Feb" :type "call"}])
+   {:name "Clara" :date "20 Feb" :type "call"}
+   {:name "David" :date "20 Feb" :type "meet"}])
 
 (def people
   [{:name "Jane" :frequency 14}

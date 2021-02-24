@@ -1,0 +1,7 @@
+.meet::before {
+	content: '⛰ ';
+}
+
+.call::before {
+	content: '📱 ';
+}
