@@ -3,14 +3,18 @@
             [reagent.core :as r]
             [reagent.dom :as rd]))
 
+;; data
+(def interactions
+  [{:name "Jane" :date "22 Feb" :type "meet"}
+   {:name "James" :date "21 Feb" :type "meet"}
+   {:name "Clara" :date "20 Feb" :type "call"}])
 
-(def data
-  {:test [{:name "Jane"
-           :things [{:type :phone-call :date "2021-02-07T19:03:59.039Z"}]}
-          {:name "Sahil"
-           :things [{:type :phone-call :date "2021-02-08T19:03:59.039Z"}
-                    {:type :meeting :date "2021-02-09T19:03:59.039Z"}]}]})
+(def people
+  [{:name "Jane" :frequency 14}
+   {:name "James" :frequency 7}
+   {:name "Clara" :frequency 60}])
 
+;; helpers
 (defn daysago
   [isodate]
   (let [days (-> (- (js/Date.) (js/Date. isodate))
@@ -21,26 +25,36 @@
                  Math/floor)]
     (str days " days ago")))
 
-(defn average [a b]
-  (/ (+ a b) 2.0))
-
-(defn thing
-  [item]
-  [:div
-   [:p (item :name)]
-   [:p (daysago (:date (get (item :things) 0)))]])
-
-(defn data-list
+;; components
+(defn alerts
   []
-  [:div "I am the data list"
+  [:div "Get in touch"
+   [:ul
+    [:li "Jane"]
+    [:li "James"]]])
+
+(defn event-item
+  [item]
+  [:li {:class (item :type)} (item :name)])
+
+(defn event-list
+  [items]
+  (into [:ul]
+        (map (fn [item] [event-item item]) items)))
+
+(defn by-date
+  [data]
+  [:div "History"
    (into [:ul]
-         (map (fn [item] [:li [thing item]]) (data :test)))])
+         (map (fn [[date events]] [:li date [event-list events]]) (group-by :date data)))])
 
 (defn app-component
   []
-  [:div "Hello I am the app"
-   [data-list]])
+  [:div
+   [alerts]
+   [by-date interactions]])
 
+;; main
 (defn mount
   []
   (rd/render [app-component]
